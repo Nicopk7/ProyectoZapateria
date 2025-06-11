@@ -1,0 +1,6 @@
+Models\Calzado.class
+Models\Factura.class
+Models\Renglon.class
+Models\Cliente.class
+Models\Empleado.class
+Models\Sucursal.class
