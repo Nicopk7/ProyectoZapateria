@@ -22,7 +22,9 @@ public class Calzado {
         this.cantStock = cantStock;
         this.sucursal = sucursal;
     }
-
+    public Calzado() {
+    
+    }
     public int getCodigo() {
         return codigo;
     }

@@ -1,6 +1,9 @@
+Models\Main.class
 Models\Calzado.class
 Models\Factura.class
 Models\Renglon.class
 Models\Cliente.class
 Models\Empleado.class
+Models\ConexionDB.class
 Models\Sucursal.class
+Models\CalzadoDAO.class

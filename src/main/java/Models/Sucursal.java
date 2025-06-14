@@ -4,16 +4,30 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Sucursal {
+    private int id;
     private String nombre;
     private String domicilio;
     private String ciudad;
     private List<Empleado> empleados;
 
-    public Sucursal(String nombre, String domicilio, String ciudad) {
+    public Sucursal(int id,String nombre, String domicilio, String ciudad) {
+        this.id = id;
         this.nombre = nombre;
         this.domicilio = domicilio;
         this.ciudad = ciudad;
         this.empleados = new ArrayList<>();
+    }
+
+    public Sucursal() {
+         
+    }
+
+     public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNombre() {
