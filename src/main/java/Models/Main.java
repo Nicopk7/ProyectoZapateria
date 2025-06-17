@@ -18,7 +18,7 @@ public class Main {
     c.setPrecioVenta(30000);
     c.setColor("Negro");
     c.setTalle(42);
-    c.setCantStock(25);
+    c.setCantStock(4);
     
     Sucursal s = new Sucursal();
         s.setId(1); // ID de sucursal existente en la base de datos
@@ -26,5 +26,6 @@ public class Main {
 
     CalzadoDAO dao = new CalzadoDAO();
     dao.insertar(c);
+    dao.listarCalzadoConStockBajo();
     
     }}

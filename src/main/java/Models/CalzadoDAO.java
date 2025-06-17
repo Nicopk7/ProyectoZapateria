@@ -13,7 +13,6 @@ import java.util.List;
  * @author Usuario
  */
 public class CalzadoDAO {
-    
      public void insertar(Calzado c) {
         String sql = "INSERT INTO calzado (codigo, descripcion, marca, precio_costo, precio_venta, color, talle, cant_stock, sucursal_id) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -35,5 +34,25 @@ public class CalzadoDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+public List<String> listarCalzadoConStockBajo() {
+        List<String> calzados = new ArrayList<>();
+        String sql = "SELECT descripcion FROM calzado WHERE CantStock < 5";
+
+        try (Connection conn = ConexionDB.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String descripcion = rs.getString("descripcion");
+                calzados.add(descripcion);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return calzados;
     }
 }
