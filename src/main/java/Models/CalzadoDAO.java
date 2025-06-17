@@ -36,17 +36,19 @@ public class CalzadoDAO {
         }
     }
 
-public List<String> listarCalzadoConStockBajo() {
-        List<String> calzados = new ArrayList<>();
-        String sql = "SELECT descripcion FROM calzado WHERE CantStock < 5";
-
+public List<Calzado> listarCalzadoConStockBajo() {
+        List<Calzado> calzados = new ArrayList<>();
+        String sql = "SELECT codigo,marca FROM calzado WHERE cant_stock < 5";
         try (Connection conn = ConexionDB.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                String descripcion = rs.getString("descripcion");
-                calzados.add(descripcion);
+                Calzado d=new Calzado();
+
+                d.setCodigo(rs.getInt("codigo"));
+                d.setMarca(rs.getString("marca"));
+                calzados.add(d);
             }
 
         } catch (SQLException e) {
@@ -55,4 +57,39 @@ public List<String> listarCalzadoConStockBajo() {
 
         return calzados;
     }
+public List<Calzado> obtenerTodos() {
+    List<Calzado> lista = new ArrayList<>();
+
+    String sql = "SELECT codigo, descripcion, marca, precio_costo, precio_venta, color, talle, cant_stock, sucursal_id FROM calzado";
+
+    try (Connection conn = ConexionDB.getConexion();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+            Calzado c = new Calzado();
+
+            c.setCodigo(rs.getInt("codigo"));
+            c.setDescripcion(rs.getString("descripcion"));
+            c.setMarca(rs.getString("marca"));
+            c.setPrecioCosto(rs.getDouble("precio_costo"));
+            c.setPrecioVenta(rs.getDouble("precio_venta"));
+            c.setColor(rs.getString("color"));
+            c.setTalle(rs.getInt("talle"));
+            c.setCantStock(rs.getInt("cant_stock"));
+
+            // Crear la sucursal y setear su ID
+            Sucursal sucursal = new Sucursal();
+            sucursal.setId(rs.getInt("sucursal_id"));
+            c.setSucursal(sucursal);
+
+            lista.add(c);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return lista;
+}
 }

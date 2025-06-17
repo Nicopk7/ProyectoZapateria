@@ -4,6 +4,8 @@
  */
 package Models;
 
+import java.util.List;
+
 /**
  *
  * @author elise
@@ -11,14 +13,14 @@ package Models;
 public class Main {
     public static void main(String[] args){
     Calzado c = new Calzado();
-    c.setCodigo(1010);
-    c.setDescripcion("Zapatilla urbana");
+    c.setCodigo(1042);
+    c.setDescripcion("Deportivo Running ");
     c.setMarca("Nike");
-    c.setPrecioCosto(20000);
-    c.setPrecioVenta(30000);
-    c.setColor("Negro");
-    c.setTalle(42);
-    c.setCantStock(4);
+    c.setPrecioCosto(30000);
+    c.setPrecioVenta(50000);
+    c.setColor("AZUL y VERDE");
+    c.setTalle(40);
+    c.setCantStock(1);
     
     Sucursal s = new Sucursal();
         s.setId(1); // ID de sucursal existente en la base de datos
@@ -26,6 +28,22 @@ public class Main {
 
     CalzadoDAO dao = new CalzadoDAO();
     dao.insertar(c);
-    dao.listarCalzadoConStockBajo();
+    List<Calzado> calzados = dao.obtenerTodos();
+    for (Calzado d : calzados) {
+        System.out.println("Código: " + d.getCodigo() +
+                           ", Descripción: " + d.getDescripcion() +
+                           ", Marca: " + d.getMarca() +
+                           ", Precio Venta: " + d.getPrecioVenta() +
+                           ", Sucursal ID: " + d.getSucursal().getId());
+    }
+     System.out.println("\n\n");
+        System.out.println("LISTADO CON POCO STOCK\n");
+    List<Calzado> calza2 = dao.listarCalzadoConStockBajo();
+    for (Calzado e : calza2) {
+        System.out.println("Código: " + e.getCodigo() +
+                           ", Marca: " + e.getMarca() );                   
+    }
+        
     
-    }}
+    }
+}
