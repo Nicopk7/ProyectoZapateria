@@ -38,7 +38,7 @@ public class CalzadoDAO {
 
 public List<Calzado> listarCalzadoConStockBajo() {
         List<Calzado> calzados = new ArrayList<>();
-        String sql = "SELECT codigo,marca FROM calzado WHERE cant_stock < 5";
+        String sql = "SELECT codigo,marca,cant_stock FROM calzado WHERE cant_stock < 5";
         try (Connection conn = ConexionDB.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -48,6 +48,7 @@ public List<Calzado> listarCalzadoConStockBajo() {
 
                 d.setCodigo(rs.getInt("codigo"));
                 d.setMarca(rs.getString("marca"));
+                d.setCantStock(rs.getInt("cant_stock"));
                 calzados.add(d);
             }
 
@@ -92,4 +93,5 @@ public List<Calzado> obtenerTodos() {
 
     return lista;
 }
+
 }

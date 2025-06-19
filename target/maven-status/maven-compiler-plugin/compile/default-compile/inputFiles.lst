@@ -1,9 +1,14 @@
 Z:\uni\uni\IngenieriaSofrware\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Calzado.java
 Z:\uni\uni\IngenieriaSofrware\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\ConexionDB.java
+Z:\uni\uni\IngenieriaSofrware\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Interfaces\PantallaPrincipal.java
 Z:\uni\uni\IngenieriaSofrware\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\CalzadoDAO.java
 Z:\uni\uni\IngenieriaSofrware\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Sucursal.java
+Z:\uni\uni\IngenieriaSofrware\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Interfaces\VentaGCalzado.java
+Z:\uni\uni\IngenieriaSofrware\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Interfaces\PanelListadoStock.java
+Z:\uni\uni\IngenieriaSofrware\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Interfaces\PanelModificarCalzado.java
 Z:\uni\uni\IngenieriaSofrware\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Renglon.java
 Z:\uni\uni\IngenieriaSofrware\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Factura.java
 Z:\uni\uni\IngenieriaSofrware\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Cliente.java
 Z:\uni\uni\IngenieriaSofrware\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Empleado.java
+Z:\uni\uni\IngenieriaSofrware\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Interfaces\PanelMostrarCalzados.java
 Z:\uni\uni\IngenieriaSofrware\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Main.java
