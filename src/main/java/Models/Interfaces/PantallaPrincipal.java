@@ -4,6 +4,14 @@
  */
 package Models.Interfaces;
 
+import Models.Calzado;
+import Models.CalzadoDAO;
+import Models.Cliente;
+import Models.ClienteDAO;
+import Models.Empleado;
+import Models.EmpleadoDAO;
+import java.util.List;
+
 /**
  *
  * @author Octavio
@@ -44,7 +52,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jPanel1.setEnabled(false);
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(new java.awt.Font("Sylfaen", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("CALZADOS SAN LUIS S.R.L");
         jLabel1.setToolTipText("");
@@ -53,17 +61,17 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(53, 53, 53)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(301, Short.MAX_VALUE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(233, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(46, 46, 46)
+                .addGap(48, 48, 48)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addContainerGap(125, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, 200));
@@ -72,6 +80,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jPanel2.setPreferredSize(new java.awt.Dimension(609, 510));
 
         jButton1.setBackground(new java.awt.Color(0, 102, 255));
+        jButton1.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Gestionar Calzado");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -81,6 +90,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         });
 
         jButton2.setBackground(new java.awt.Color(51, 102, 255));
+        jButton2.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Gestionar Empleado");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -90,6 +100,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         });
 
         jButton3.setBackground(new java.awt.Color(0, 102, 255));
+        jButton3.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Gestionar Sucursales");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -99,6 +110,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         });
 
         jButton4.setBackground(new java.awt.Color(51, 102, 255));
+        jButton4.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
         jButton4.setForeground(new java.awt.Color(255, 255, 255));
         jButton4.setText("Gestionar Cliente");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -108,6 +120,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         });
 
         jButton5.setBackground(new java.awt.Color(51, 102, 255));
+        jButton5.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
         jButton5.setForeground(new java.awt.Color(255, 255, 255));
         jButton5.setText("Registrar Venta");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -158,7 +171,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 this.dispose();
-VentaGCalzado v1= new VentaGCalzado();
+PanelGestionCalzado v1= new PanelGestionCalzado();
 v1.setVisible(true);   
      // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -176,7 +189,19 @@ v1.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+this.dispose();
+EmpleadoDAO dao = new EmpleadoDAO();
+ClienteDAO dao1=new ClienteDAO();
+CalzadoDAO dao2=new CalzadoDAO();
+List<Calzado> calzados= dao2.obtenerTodos();
+List<Cliente> clientes=dao1.obtenerTodos();
+List<Empleado> empleados = dao.obtenerTodos();
+
+PanelVenta v2 = new PanelVenta(empleados,calzados,clientes);
+v2.setVisible(true);
+  
+
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**

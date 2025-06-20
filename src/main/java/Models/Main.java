@@ -14,7 +14,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args){
 //--------------------------------------------------------------------------------------
-    Calzado c = new Calzado();
+ /*   Calzado c = new Calzado();
     c.setCodigo(1042);
     c.setDescripcion("Deportivo Running ");
     c.setMarca("Nike");
@@ -44,15 +44,16 @@ if (calzadoEncontrado != null) {
 } else {
     System.out.println("Calzado no encontrado para el código: " + "1010");
 }
+*/
     
     //--------------------------------------------------------------------
     Empleado e = new Empleado();
-    e.setLegajo(3);
-    e.setNombre("Carlitos");
-    e.setDni("44300400");
-    e.setDomicilio("Viva milei");
-    e.setTelefono("12345678910");
-    e.setAntiguedad(3);
+    e.setLegajo(1);
+    e.setNombre("Eliseo Vottero");
+    e.setDni("44333444");
+    e.setDomicilio("Peronista 126");
+    e.setTelefono("2664444040");
+    e.setAntiguedad(4);
     Sucursal q = new Sucursal();
         q.setId(1); // ID de sucursal existente en la base de datos
         e.setSucursal(q);
@@ -79,7 +80,7 @@ if (calzadoEncontrado != null) {
 
 //----------------------------------------------------------------------------------------
 
-Cliente t = new Cliente();
+/*Cliente t = new Cliente();
 t.setNombre("Carlos");
 t.setDNI_CUIL("44300400");
 t.setTelefono("123456789");
@@ -92,9 +93,9 @@ for (Cliente p : clientes) {
     System.out.println("Nombre: " + p.getNombre() +
                        ", DNI/CUIL: " + p.getDNI_CUIL() +
                        ", Telefono: " + p.getTelefono());
+*/
 }
     }
 
 
 
-}
