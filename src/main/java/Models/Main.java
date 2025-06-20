@@ -13,7 +13,8 @@ import java.util.List;
  */
 public class Main {
     public static void main(String[] args){
-    /*Calzado c = new Calzado();
+//--------------------------------------------------------------------------------------
+    Calzado c = new Calzado();
     c.setCodigo(1042);
     c.setDescripcion("Deportivo Running ");
     c.setMarca("Nike");
@@ -22,8 +23,29 @@ public class Main {
     c.setColor("AZUL y VERDE");
     c.setTalle(40);
     c.setCantStock(1);
-    */
+    Sucursal s = new Sucursal();
+        s.setId(1); // ID de sucursal existente en la base de datos
+        c.setSucursal(s);
+ CalzadoDAO dao1 = new CalzadoDAO();
+    dao1.insertar(c);
+Calzado calzadoEncontrado = new Calzado();
+calzadoEncontrado = dao1.buscarCalzado("1010"); // Código que quieres consultar
+
+if (calzadoEncontrado != null) {
+    System.out.println("Código: " + calzadoEncontrado.getCodigo() +
+                       ", Descripción: " + calzadoEncontrado.getDescripcion() +
+                       ", Marca: " + calzadoEncontrado.getMarca() +
+                       ", Precio Costo: " + calzadoEncontrado.getPrecioCosto() +
+                       ", Precio Venta: " + calzadoEncontrado.getPrecioVenta() +
+                       ", Color: " + calzadoEncontrado.getColor() +
+                       ", Talle: " + calzadoEncontrado.getTalle() +
+                       ", Cantidad en Stock: " + calzadoEncontrado.getCantStock() +
+                       ", Sucursal ID: " + calzadoEncontrado.getSucursal().getId()) ;
+} else {
+    System.out.println("Calzado no encontrado para el código: " + "1010");
+}
     
+    //--------------------------------------------------------------------
     Empleado e = new Empleado();
     e.setLegajo(3);
     e.setNombre("Carlitos");
@@ -31,12 +53,9 @@ public class Main {
     e.setDomicilio("Viva milei");
     e.setTelefono("12345678910");
     e.setAntiguedad(3);
-    
-    Sucursal s = new Sucursal();
-        s.setId(1); // ID de sucursal existente en la base de datos
-        e.setSucursal(s);
-        
-
+    Sucursal q = new Sucursal();
+        q.setId(1); // ID de sucursal existente en la base de datos
+        e.setSucursal(q);
     EmpleadoDAO dao = new EmpleadoDAO();
     dao.insertar(e);
     List<Empleado> empleados = dao.obtenerTodos();
@@ -50,25 +69,32 @@ public class Main {
                            ", Sucursal ID: " + d.getSucursal().getId()) ;
     }
      System.out.println("\n\n");
-        System.out.println("LISTADO CON POCO STOCK\n");
+        //System.out.println("LISTADO CON POCO STOCK\n");
     /*List<Calzado> calza2 = dao.listarCalzadoConStockBajo();
     for (Calzado e : calza2) {
         System.out.println("Código: " + e.getCodigo() +
                            ", Marca: " + e.getMarca() );                   
     }*/
+//------------------------------------------------------------------------------------------
 
-    System.out.println("\n\n");
-    System.out.println("Encontrado?");
-    String dni_abuscar = "44300400";
-    Empleado encontrado = new Empleado();
-    encontrado = dao.buscarEmpleado(dni_abuscar);
-    System.out.println("Legajo: " + encontrado.getLegajo() +
-                           ", Nombre: " + encontrado.getNombre() +
-                           ", DNI: " + encontrado.getDni() +
-                           ", Domicilio: " + encontrado.getDomicilio() +
-                           "Telefono:" + encontrado.getTelefono() +
-                           "Antiguedad:" + encontrado.getAntiguedad() +
-                           ", Sucursal ID: " + encontrado.getSucursal().getId()) ;
-    
+//----------------------------------------------------------------------------------------
+
+Cliente t = new Cliente();
+t.setNombre("Carlos");
+t.setDNI_CUIL("44300400");
+t.setTelefono("123456789");
+ClienteDAO daocliente = new ClienteDAO();
+daocliente.insertar(t);
+
+
+List<Cliente> clientes = daocliente.obtenerTodos(); // Obtienes la lista de clientes
+for (Cliente p : clientes) {
+    System.out.println("Nombre: " + p.getNombre() +
+                       ", DNI/CUIL: " + p.getDNI_CUIL() +
+                       ", Telefono: " + p.getTelefono());
+}
     }
+
+
+
 }

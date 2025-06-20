@@ -28,9 +28,7 @@ Models\FacturaDAO.class
 Models\Interfaces\PanelListadoStock$2.class
 Models\Interfaces\VentaGCalzado$5.class
 Models\Interfaces\VentaGCalzado$4.class
-Models\Interfaces\PanelModificarCalzado.class
 Models\Interfaces\PantallaPrincipal$6.class
 Models\Main.class
 Models\Factura.class
-Models\Interfaces\PanelModificarCalzado$1.class
 Models\CalzadoDAO.class

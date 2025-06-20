@@ -59,37 +59,33 @@ public List<Empleado> obtenerTodos() {
     return lista;
 }
 
-public Empleado buscarEmpleado(String x){
-    Empleado e = new Empleado();
-    
-    String sql = "SELECT dni FROM empleado WHERE dni == x";
+public Empleado buscarEmpleado(String x) {
+    Empleado e = null; // Importante inicializar en null
+    String sql = "SELECT * FROM empleado WHERE dni = ?";
     
     try (Connection conn = ConexionDB.getConexion();
-         PreparedStatement stmt = conn.prepareStatement(sql);
-         ResultSet rs = stmt.executeQuery()){
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        
+        stmt.setString(1, x);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                e = new Empleado();
+                e.setLegajo(rs.getInt("legajo"));
+                e.setNombre(rs.getString("nombre"));
+                e.setDni(rs.getString("dni"));
+                e.setDomicilio(rs.getString("domicilio"));
+                e.setTelefono(rs.getString("telefono"));
+                e.setAntiguedad(rs.getInt("antiguedad"));
 
-
-        while (rs.next()) {
-            Empleado empleado = new Empleado();
-
-            e.setLegajo(rs.getInt("legajo"));
-            e.setNombre(rs.getString("nombre"));
-            e.setDni(rs.getString("dni"));
-            e.setDomicilio(rs.getString("domicilio"));
-            e.setTelefono(rs.getString("telefono"));
-            e.setAntiguedad(rs.getInt("antiguedad"));
-
-            Sucursal sucursal = new Sucursal();
-            sucursal.setId(rs.getInt("sucursal_id"));
-            e.setSucursal(sucursal);
-            
-            e = empleado;
+                Sucursal sucursal = new Sucursal();
+                sucursal.setId(rs.getInt("sucursal_id"));
+                e.setSucursal(sucursal);
+            }
         }
-        }
-        catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    return e;
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
+    return e; // Retorna null si no encontró nada
 }
 
 }

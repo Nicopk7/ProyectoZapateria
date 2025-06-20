@@ -50,7 +50,38 @@ public List<Factura> obtenerTodos() {
         e.printStackTrace();
     }
 
+
     return lista;
+}
+public Factura buscarFactura(int facturaId) {
+    Factura f = null; // inicializar en null
+    String sql = "SELECT id, cantidad, total, cliente_id FROM factura WHERE id = ?";
+    
+    try (Connection conn = ConexionDB.getConexion();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        
+        // Establecer el valor del parámetro (puede ser otro criterio si deseas)
+        stmt.setInt(1, facturaId);
+        
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                f = new Factura(); 
+                f.setId(rs.getInt("id"));
+                f.setCantidad(rs.getInt("cantidad"));
+                f.setTotal(rs.getDouble("total")); 
+                Cliente cliente = new Cliente();
+                cliente.setDNI_CUIL(rs.getString("dni_cuil")); // usar el campo DNI
+                f.setCliente(cliente);
+
+                
+                // Si tienes una clase Cliente, podrías cargarla también
+                // f.setCliente(obtenerClientePorId(rs.getInt("cliente_id")));
+            }
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
+    return f; // retornará null si no se encontró
 }
 
 }

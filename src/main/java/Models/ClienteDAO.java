@@ -11,9 +11,9 @@ public class ClienteDAO {
         try (Connection conn = ConexionDB.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(2, c.getNombre());
-            stmt.setString(3, c.getDNI_CUIL());
-            stmt.setString(4, c.getTelefono());
+            stmt.setString(1, c.getNombre());
+            stmt.setString(2, c.getDNI_CUIL());
+            stmt.setString(3, c.getTelefono());
             stmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -46,6 +46,27 @@ public List<Cliente> obtenerTodos() {
     }
 
     return lista;
+}
+public Cliente buscarCliente(String x) {
+    Cliente c = null; // inicializar en null
+    String sql = "SELECT nombre, dni_cuil, telefono FROM cliente WHERE dni_cuil = ?";
+    
+    try (Connection conn = ConexionDB.getConexion();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        
+        stmt.setString(1, x);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                c = new Cliente();
+                c.setNombre(rs.getString("nombre"));
+                c.setDNI_CUIL(rs.getString("dni_cuil"));
+                c.setTelefono(rs.getString("telefono"));
+            }
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
+    return c; // devuelve null si no se encontró
 }
 
 }

@@ -94,4 +94,34 @@ public List<Calzado> obtenerTodos() {
     return lista;
 }
 
+public Calzado buscarCalzado(String codigo) {
+    Calzado c = null; // inicializar en null
+    String sql = "SELECT codigo, descripcion, marca, precio_costo, precio_venta, color, talle, cant_stock, sucursal_id FROM calzado WHERE codigo = ?";
+    
+    try (Connection conn = ConexionDB.getConexion();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        
+        stmt.setString(1, codigo);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                c = new Calzado();
+                c.setCodigo(rs.getInt("codigo"));
+                c.setDescripcion(rs.getString("descripcion"));
+                c.setMarca(rs.getString("marca"));
+                c.setPrecioCosto(rs.getDouble("precio_costo"));
+                c.setPrecioVenta(rs.getDouble("precio_venta"));
+                c.setColor(rs.getString("color"));
+                c.setTalle(rs.getInt("talle")); // o int, según corresponda
+                c.setCantStock(rs.getInt("cant_stock"));
+            Sucursal sucursal = new Sucursal();
+            sucursal.setId(rs.getInt("sucursal_id"));
+            c.setSucursal(sucursal);
+            }
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
+    return c; // retornar null si no se encontró
+}
+
 }
