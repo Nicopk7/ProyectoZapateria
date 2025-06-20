@@ -5,11 +5,19 @@
 package Models.Interfaces;
 
 import Models.Calzado;
+import Models.CalzadoDAO;
 import Models.Cliente;
+import Models.ClienteDAO;
+import Models.ConexionDB;
 import Models.Empleado;
+import Models.EmpleadoDAO;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 
 /**
@@ -24,6 +32,7 @@ public class PanelVenta extends javax.swing.JFrame {
      */
 public PanelVenta(List<Empleado> empleados,List<Calzado> calzados, List<Cliente> clientes) {
     initComponents(); // Crea la interfaz
+   btnConfirmarVenta.setEnabled(false);
     cargarEmpleados(empleados); // Llena la combo
     cargarCalzados(calzados);
     cargarClientes(clientes);
@@ -32,7 +41,7 @@ public void cargarCalzados(List<Calzado> calzados){
    ComboBoxCalzado.removeAllItems(); // Limpia los ítems anteriores
 
     for (Calzado a: calzados) {
-        ComboBoxCalzado.addItem(a.getCodigo()+(" ")+a.getMarca()+(" ")+a.getDescripcion()+(" ")+a.getTalle()); // Agrega el nombre al combo
+        ComboBoxCalzado.addItem(a.getCodigo()+(" ")+a.getMarca()+(" ")+a.getDescripcion()+(" ")+a.getTalle()+(" ")+("$")+a.getPrecioVenta()); // Agrega el nombre al combo
     }
 }
 public void cargarClientes(List<Cliente> clientes){
@@ -65,7 +74,7 @@ public void cargarEmpleados(List<Empleado> empleados) {
         jTable1 = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        TablaVenta = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -79,6 +88,7 @@ public void cargarEmpleados(List<Empleado> empleados) {
         jButton2 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
+        btnConfirmarVenta = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -97,25 +107,24 @@ public void cargarEmpleados(List<Empleado> empleados) {
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 255));
 
-        jTable2.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        TablaVenta.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
+        TablaVenta.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
-                "Indice", "Codigo Calzado", "Precio"
+                "Indice", "Codigo Calzado", "Descripcion", "Marca", "Precio"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(TablaVenta);
 
         jButton3.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
         jButton3.setText("Cancelar Venta");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
         jButton4.setForeground(new java.awt.Color(255, 0, 0));
@@ -130,25 +139,23 @@ public void cargarEmpleados(List<Empleado> empleados) {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(66, 66, 66)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(192, 192, 192)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(55, 55, 55))
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton3))
+                .addGap(48, 48, 48))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -172,6 +179,11 @@ public void cargarEmpleados(List<Empleado> empleados) {
         jLabel1.setText("Seleccione el/los Calzados que lleva el cliente");
 
         ComboBoxCalzado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        ComboBoxCalzado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboBoxCalzadoActionPerformed(evt);
+            }
+        });
 
         jButton1.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
         jButton1.setText("Confirmar Calzado");
@@ -191,6 +203,20 @@ public void cargarEmpleados(List<Empleado> empleados) {
 
         jButton5.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
         jButton5.setText("Realizar Pago");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        btnConfirmarVenta.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
+        btnConfirmarVenta.setForeground(new java.awt.Color(0, 204, 0));
+        btnConfirmarVenta.setText("Confirmar Venta");
+        btnConfirmarVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmarVentaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -216,7 +242,10 @@ public void cargarEmpleados(List<Empleado> empleados) {
                         .addGap(21, 21, 21))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnConfirmarVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -242,7 +271,9 @@ public void cargarEmpleados(List<Empleado> empleados) {
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(37, 37, 37)
                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(86, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnConfirmarVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -251,35 +282,163 @@ public void cargarEmpleados(List<Empleado> empleados) {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void ComboBoxEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxEmpleadoActionPerformed
-        // TODO add your handling code here:
+       
     }//GEN-LAST:event_ComboBoxEmpleadoActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+                                          
+
+    DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
+
+
+    String seleccion = (String) ComboBoxCalzado.getSelectedItem();
+
+
+    String[] partes = seleccion.split(" "); // ajusta si el formato es diferente
+
+
+    String codigo = partes[0];
+
+
+    String marca = partes[1];
+
+   
+    StringBuilder descripcionBuilder = new StringBuilder();
+    for (int i = 2; i < partes.length - 1; i++) {
+        descripcionBuilder.append(partes[i]);
+        if (i < partes.length - 2) {
+            descripcionBuilder.append(" ");
+        }
+    }
+    String descripcion = descripcionBuilder.toString();
+
+ 
+    String precio = partes[partes.length - 1];
+
+  
+    model.addRow(new Object[]{model.getRowCount() + 1, codigo, descripcion, marca, precio});
+
+
+    ComboBoxCalzado.setSelectedIndex(0);
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+  double total = 0.0;
+
+    DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
+
+    for (int i = 0; i < model.getRowCount(); i++) {
+
+        Object valorPrecio = model.getValueAt(i, 4);
+  
+        String precioStr = valorPrecio.toString().replace("$", "").replace(",", "").trim();
+        try {
+            double precio = Double.parseDouble(precioStr);
+            total += precio;
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(this, "Error en parseo de precio en fila " + (i+1));
+        }
+    }
+
+    // Mostrar el total en algún JTextField, por ejemplo uno llamado txtTotal
+    jTextField1.setText(String.format("$%.2f", total));        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void ComboBoxCalzadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxCalzadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboBoxCalzadoActionPerformed
+
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-this.dispose();
-PantallaPrincipal v1= new PantallaPrincipal();
-v1.setVisible(true);         // TODO add your handling code here:
+        this.dispose();
+        PantallaPrincipal v1= new PantallaPrincipal();
+        v1.setVisible(true);        
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+   int respuesta = JOptionPane.showConfirmDialog(this, 
+                    "¿Confirmar realización de pago correctamente?", 
+                    "Confirmación de Pago", 
+                    JOptionPane.YES_NO_OPTION);
+
+    if (respuesta == JOptionPane.YES_OPTION) {
+        JOptionPane.showMessageDialog(this, "Pago realizado con éxito");
+        btnConfirmarVenta.setEnabled(true);
+    } else {
+        JOptionPane.showMessageDialog(this, "Pago no realizado");
+        
+    }       
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void btnConfirmarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarVentaActionPerformed
+   try {
+        // Recorrer todas las filas de la tabla de venta
+        int filas = TablaVenta.getRowCount();
+
+        // Abrimos conexión a la BD
+        Connection conn = ConexionDB.getConexion();
+
+        // Preparar la sentencia SQL de actualización
+        String sql = "UPDATE calzado SET cant_stock = cant_stock - 1 WHERE codigo = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+
+        boolean errorAlActualizar = false;
+
+        for (int i = 0; i < filas; i++) {
+            String codigoProducto = (String) TablaVenta.getValueAt(i, 1); // La columna 1 es código
+            ps.setString(1, codigoProducto);
+            int filasActualizadas = ps.executeUpdate();
+
+            if (filasActualizadas == 0) {
+                errorAlActualizar = true;
+                JOptionPane.showMessageDialog(null, "No se encontró el producto con código: " + codigoProducto);
+            }
+        }
+
+        ps.close();
+        conn.close();
+
+        if (!errorAlActualizar) {
+            JOptionPane.showMessageDialog(null, "Stock actualizado correctamente para todos los productos.");
+            // Puedes limpiar la tabla o hacer otras acciones luego...
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al actualizar stock: " + e.getMessage());
+        e.printStackTrace();
+    }
+        this.dispose();
+        PantallaPrincipal v1= new PantallaPrincipal();
+        v1.setVisible(true); 
+
+    }//GEN-LAST:event_btnConfirmarVentaActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+this.dispose();
+EmpleadoDAO dao = new EmpleadoDAO();
+ClienteDAO dao1=new ClienteDAO();
+CalzadoDAO dao2=new CalzadoDAO();
+List<Calzado> calzados= dao2.obtenerTodos();
+List<Cliente> clientes=dao1.obtenerTodos();
+List<Empleado> empleados = dao.obtenerTodos();
+
+PanelVenta v2 = new PanelVenta(empleados,calzados,clientes);
+v2.setVisible(true);     // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -299,6 +458,8 @@ public static void main(String args[]) {
     private javax.swing.JComboBox<String> ComboBoxCalzado;
     private javax.swing.JComboBox<String> ComboBoxCliente;
     private javax.swing.JComboBox<String> ComboBoxEmpleado;
+    private javax.swing.JTable TablaVenta;
+    private javax.swing.JButton btnConfirmarVenta;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -312,7 +473,6 @@ public static void main(String args[]) {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
