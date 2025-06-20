@@ -9,6 +9,10 @@ public class Empleado {
     private int antiguedad;
     private Sucursal sucursal;
 
+    public Empleado(){
+        
+    };
+    
     public Empleado(int legajo, String nombre, String dni, String domicilio, String telefono, int antiguedad, Sucursal sucursal) {
         this.legajo = legajo;
         this.nombre = nombre;

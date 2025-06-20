@@ -6,18 +6,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Factura {
+    private int id;
     private int cantidad;
     private double total;
     private Cliente cliente;
     private List<Renglon> renglones;
 
-    public Factura(int cantidad, double total, Cliente cliente, List<Renglon> renglones) {
+    public Factura (){
+        
+    };
+    
+    public Factura(int id, int cantidad, double total, Cliente cliente, List<Renglon> renglones) {
+        this.id = id;
         this.cantidad = cantidad;
         this.total = total;
         this.cliente = cliente;
         this.renglones = renglones;
     }
 
+    public int getId() {
+        return id;
+    }
+    
     public int getCantidad() {
         return cantidad;
     }
@@ -32,6 +42,10 @@ public class Factura {
 
     public List<Renglon> getRenglones() {
         return renglones;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setCantidad(int cantidad) {

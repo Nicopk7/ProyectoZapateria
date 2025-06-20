@@ -5,6 +5,10 @@ public class Cliente {
     private String DNI_CUIL;
     private String telefono;
 
+    public Cliente(){
+        
+    };
+    
     public Cliente(String nombre, String DNI_CUIL, String telefono) {
         this.nombre = nombre;
         this.DNI_CUIL = DNI_CUIL;
