@@ -6,6 +6,8 @@ package Models.Interfaces;
 
 import Models.Calzado;
 import Models.CalzadoDAO;
+import Models.Sucursal;
+import Models.SucursalDAO;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
@@ -159,6 +161,12 @@ public class PanelGestionCalzado extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+this.dispose();
+SucursalDAO dao1=new SucursalDAO();
+List<Sucursal> sucursales= dao1.obtenerTodos();
+AgregarCalzado v3= new AgregarCalzado(sucursales);
+v3.setVisible(true);
+
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
