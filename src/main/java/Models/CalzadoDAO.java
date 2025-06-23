@@ -92,13 +92,13 @@ public List<Calzado> obtenerTodos() {
 
     return lista;
 }
-public void descontarStock(int codigo) {
+public void descontarStock(String codigo) {
     String sql = "UPDATE calzado SET cant_stock = cant_stock - 1 WHERE codigo = ? AND cant_stock > 0";
 
     try (Connection con = ConexionDB.getConexion();
          PreparedStatement ps = con.prepareStatement(sql)) {
 
-        ps.setInt(1, codigo);
+        ps.setString(1, codigo);
         ps.executeUpdate();
 
     } catch (SQLException e) {

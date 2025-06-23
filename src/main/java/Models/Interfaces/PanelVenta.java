@@ -34,6 +34,9 @@ private DefaultTableModel model;
      */
 public PanelVenta(List<Empleado> empleados,List<Calzado> calzados, List<Cliente> clientes) {
     initComponents(); 
+    ComboBoxCliente.setEditable(true);
+    ComboBoxEmpleado.setEditable(true);
+    ComboBoxCalzado.setEditable(true);
 model = new DefaultTableModel();
 model.setColumnIdentifiers(new Object[]{"Indice", "Código", "Descripción", "Marca", "Precio Venta", "Cantidad", "Total"});
 TablaVenta.setModel(model);
@@ -60,7 +63,8 @@ public void cargarEmpleados(List<Empleado> empleados) {
     ComboBoxEmpleado.removeAllItems();
 
     for (Empleado e : empleados) {
-        ComboBoxEmpleado.addItem(e.getNombre()); 
+        ComboBoxEmpleado.addItem(e.getNombre() + " " + e.getDni());
+ 
     }
 }
 
@@ -298,65 +302,68 @@ public void cargarEmpleados(List<Empleado> empleados) {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
 
-    // Obtener el calzado seleccionado
-    String seleccion = (String) ComboBoxCalzado.getSelectedItem();
-    if (seleccion == null || seleccion.isEmpty()) return;
+    // Leer lo que esté escrito o seleccionado en el ComboBox
+    Object itemCalzado = ComboBoxCalzado.getEditor().getItem();
+    String textoCombo = itemCalzado != null ? itemCalzado.toString().trim() : "";
 
-    String[] partes = seleccion.split(" ");
-
-    String codigo = partes[0];
-    String marca = partes[1];
-
-    StringBuilder descripcionBuilder = new StringBuilder();
-    for (int i = 2; i < partes.length - 1; i++) {
-        descripcionBuilder.append(partes[i]);
-        if (i < partes.length - 2) {
-            descripcionBuilder.append(" ");
-        }
+    if (textoCombo.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Debe seleccionar o escribir un calzado.");
+        return;
     }
-    String descripcion = descripcionBuilder.toString();
 
-    // Limpiar el "$" del precio si lo tiene
-    String precioStr = partes[partes.length - 1].replaceAll("[^\\d.]", "");
-    double precio = Double.parseDouble(precioStr);
+    // Extraer el primer valor (código alfanumérico)
+    String[] partes = textoCombo.split(" ");
+    if (partes.length == 0) {
+        JOptionPane.showMessageDialog(null, "Formato inválido de selección.");
+        return;
+    }
 
+    String codigo = partes[0]; // lo tomamos como String directamente
+
+    // Buscar el calzado en la BD por código
+    CalzadoDAO calzadoDAO = new CalzadoDAO();
+    Calzado calzado = calzadoDAO.buscarCalzado(codigo);
+
+    if (calzado == null) {
+        JOptionPane.showMessageDialog(null, "Calzado no encontrado en la base de datos.");
+        return;
+    }
+
+    // Verificar si ya está en la tabla
     boolean encontrado = false;
-
     for (int i = 0; i < model.getRowCount(); i++) {
-        String codigoEnTabla = (String) model.getValueAt(i, 1); // columna "Código"
+        String codigoTabla = model.getValueAt(i, 1).toString();
 
-        if (codigo.equals(codigoEnTabla)) {
-            int cantidad = (int) model.getValueAt(i, 5); // columna "Cantidad"
+        if (codigo.equals(codigoTabla)) {
+            int cantidad = Integer.parseInt(model.getValueAt(i, 5).toString());
             cantidad++;
 
-            model.setValueAt(cantidad, i, 5); // actualizar cantidad
-            model.setValueAt(precio * cantidad, i, 6); // actualizar total
-
-            // Descontar 1 del stock en la BD
-            new CalzadoDAO().descontarStock(Integer.parseInt(codigo));
+            model.setValueAt(cantidad, i, 5);
+            model.setValueAt(calzado.getPrecioVenta() * cantidad, i, 6);
             encontrado = true;
             break;
         }
     }
 
     if (!encontrado) {
-        int nuevaFila = model.getRowCount() + 1;
-        model.addRow(new Object[]{
-            nuevaFila,      // Índice
-            codigo,         // Código
-            descripcion,    // Descripción
-            marca,          // Marca
-            precio,         // Precio unitario
-            1,              // Cantidad inicial
-            precio          // Total (1 x precio)
-        });
-
-        // Descontar 1 del stock en la BD
-        new CalzadoDAO().descontarStock(Integer.parseInt(codigo));
+        int indice = model.getRowCount() + 1;
+        Object[] fila = new Object[]{
+            indice,
+            calzado.getCodigo(),
+            calzado.getDescripcion(),
+            calzado.getMarca(),
+            calzado.getPrecioVenta(),
+            1,
+            calzado.getPrecioVenta()
+        };
+        model.addRow(fila);
     }
 
-    // 🔄 Actualizar ComboBox para que desaparezca el calzado si quedó sin stock
-    List<Calzado> listaActualizada = new CalzadoDAO().obtenerTodos();
+    // Descontar stock
+    calzadoDAO.descontarStock(codigo);
+
+    // Refrescar la lista de calzados en la ComboBox
+    List<Calzado> listaActualizada = calzadoDAO.obtenerTodos();
     cargarCalzados(listaActualizada);
 
     // ✅ (opcional) Reiniciar selección
@@ -476,61 +483,82 @@ if (filas == 0) {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void btnConfirmarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarVentaActionPerformed
-DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
-String clienteSeleccionado1 = (String) ComboBoxCliente.getSelectedItem();
+                                                  
+    DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
 
-String[] partes = clienteSeleccionado1.split(" ");
-String clienteSeleccionado = partes[partes.length - 1];
+    // Validar que haya calzados en la tabla
+    if (model.getRowCount() == 0) {
+        JOptionPane.showMessageDialog(null, "No hay calzados en la venta.");
+        return;
+    }
 
-if (model.getRowCount() == 0) {
-    JOptionPane.showMessageDialog(null, "No hay calzados en la venta.");
-    return;
-}
+    // Obtener y validar CLIENTE
+    Object itemCliente = ComboBoxCliente.getEditor().getItem();
+    String clienteRaw = itemCliente != null ? itemCliente.toString().trim() : "";
 
-if (clienteSeleccionado == null || clienteSeleccionado.trim().isEmpty()) {
-    JOptionPane.showMessageDialog(null, "Debe seleccionar un cliente.");
-    return;
-}
+    // Extraer posible DNI del cliente
+    String posibleDNICliente = clienteRaw.replaceAll(".*?(\\d+)$", "$1");
 
-int cantidadTotal = 0;
-double totalFinal = 0.0;
+    ClienteDAO clienteDAO = new ClienteDAO();
+    Cliente cliente = clienteDAO.buscarCliente(posibleDNICliente);
 
-for (int i = 0; i < model.getRowCount(); i++) {
-    // Usar Double.parseDouble en lugar de Integer.parseInt
-    double cantidadDouble = Double.parseDouble(model.getValueAt(i, 5).toString());
-    int cantidad = (int) cantidadDouble; // convertir a entero si es necesario
+    if (cliente == null) {
+        JOptionPane.showMessageDialog(null, "Cliente no encontrado en la base de datos.");
+        return;
+    }
 
-    // Para total, continúa usando Double.parseDouble
-    double total = Double.parseDouble(model.getValueAt(i, 6).toString());
+    // Obtener y validar EMPLEADO
+    Object itemEmpleado = ComboBoxEmpleado.getEditor().getItem();
+    String empleadoRaw = itemEmpleado != null ? itemEmpleado.toString().trim() : "";
 
-    cantidadTotal += cantidad;
-    totalFinal += total;
-}
+    // Extraer posible DNI del empleado
+    String posibleDNIEmpleado = empleadoRaw.replaceAll(".*?(\\d+)$", "$1");
 
-Factura factura = new Factura();
-factura.setCantidad(cantidadTotal); // cantidad total de calzados
-factura.setTotal(totalFinal); // La cantidad total de calzados en la columna 'total'
+    EmpleadoDAO empleadoDAO = new EmpleadoDAO();
+    Empleado empleado = empleadoDAO.buscarEmpleado(posibleDNIEmpleado);
 
-Cliente Buscar = new Cliente();
-ClienteDAO aux = new ClienteDAO();
-Buscar = aux.buscarCliente(clienteSeleccionado);
-factura.setCliente(Buscar); // asignar cliente
+    if (empleado == null) {
+        JOptionPane.showMessageDialog(null, "Empleado no encontrado en la base de datos.");
+        return;
+    }
 
-try {
-    FacturaDAO facturaDAO = new FacturaDAO();
-    facturaDAO.insertarFactura(factura);
+    // Calcular totales
+    int cantidadTotal = 0;
+    double totalFinal = 0.0;
 
-    JOptionPane.showMessageDialog(null, "Venta registrada con éxito.");
+    for (int i = 0; i < model.getRowCount(); i++) {
+        double cantidadDouble = Double.parseDouble(model.getValueAt(i, 5).toString());
+        int cantidad = (int) cantidadDouble;
 
-    model.setRowCount(0); // limpiar tabla
+        double total = Double.parseDouble(model.getValueAt(i, 6).toString());
 
-} catch (Exception ex) {
-    ex.printStackTrace();
-    JOptionPane.showMessageDialog(null, "Error al registrar la venta.");
-}
-        this.dispose();
-        PantallaPrincipal v1= new PantallaPrincipal();
-        v1.setVisible(true);    
+        cantidadTotal += cantidad;
+        totalFinal += total;
+    }
+
+    // Crear factura
+    Factura factura = new Factura();
+    factura.setCantidad(cantidadTotal); // cantidad total de calzados
+    factura.setTotal(totalFinal);       // total a pagar
+    factura.setCliente(cliente);
+    //factura.setEmpleado(empleado);      // solo si tu clase Factura tiene este campo
+
+    try {
+        FacturaDAO facturaDAO = new FacturaDAO();
+        facturaDAO.insertarFactura(factura);
+
+        JOptionPane.showMessageDialog(null, "Venta registrada con éxito.");
+        model.setRowCount(0); // limpiar tabla
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error al registrar la venta.");
+    }
+
+    // Volver a la pantalla principal
+    this.dispose();
+    PantallaPrincipal v1 = new PantallaPrincipal();
+    v1.setVisible(true);
+
 
 /*   try {
         // Recorrer todas las filas de la tabla de venta
