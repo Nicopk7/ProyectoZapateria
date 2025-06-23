@@ -57,15 +57,13 @@ public class PanelGestionCalzado extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(0, 51, 255));
+        jButton2.setBackground(new java.awt.Color(204, 204, 204));
         jButton2.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Eliminar Calzado");
         jButton2.setPreferredSize(new java.awt.Dimension(109, 32));
 
-        jButton3.setBackground(new java.awt.Color(0, 51, 255));
+        jButton3.setBackground(new java.awt.Color(204, 204, 204));
         jButton3.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Modificar Calzado");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -73,9 +71,8 @@ public class PanelGestionCalzado extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setBackground(new java.awt.Color(0, 51, 255));
+        jButton4.setBackground(new java.awt.Color(204, 204, 204));
         jButton4.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(255, 255, 255));
         jButton4.setText("Buscar Calzado");
 
         jButton5.setBackground(new java.awt.Color(0, 51, 255));
@@ -167,7 +164,7 @@ List<Sucursal> sucursales= dao1.obtenerTodos();
 AgregarCalzado v3= new AgregarCalzado(sucursales);
 v3.setVisible(true);
 
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -176,10 +173,10 @@ this.dispose();
     vl.setVisible(true);
 
     DefaultTableModel modelo = (DefaultTableModel) vl.getTablaStock().getModel();
-    modelo.setRowCount(0); // Limpiar filas anteriores si las hay
+    modelo.setRowCount(0); 
 
     CalzadoDAO dao = new CalzadoDAO();
-    List<Calzado> calzados = dao.listarCalzadoConStockBajo(); // ya hace el filtro
+    List<Calzado> calzados = dao.listarCalzadoConStockBajo(); 
 
     int i = 1;
     for (Calzado c : calzados) {
@@ -187,7 +184,7 @@ this.dispose();
             i++,
             c.getCodigo(),
             c.getMarca(),
-            c.getCantStock() // O el campo que vos quieras mostrar
+            c.getCantStock() 
         });
     }
 
@@ -202,10 +199,10 @@ this.dispose();
     v2.setVisible(true);
 
     DefaultTableModel modelo = (DefaultTableModel) v2.getTablaStock().getModel();
-    modelo.setRowCount(0); // Limpiar filas anteriores si las hay
+    modelo.setRowCount(0); 
 
     CalzadoDAO dao = new CalzadoDAO();
-    List<Calzado> calzados = dao.obtenerTodos(); // ya hace el filtro
+    List<Calzado> calzados = dao.obtenerTodos(); 
 
     int i = 1;
     for (Calzado c : calzados) {
@@ -221,17 +218,17 @@ this.dispose();
             c.getCantStock(),
             c.getSucursal().getId()
         });
-    } // TODO add your handling code here:
+    } 
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
 this.dispose();
 PantallaPrincipal v1= new PantallaPrincipal();
-v1.setVisible(true);           // TODO add your handling code here:
+v1.setVisible(true);       
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+       
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

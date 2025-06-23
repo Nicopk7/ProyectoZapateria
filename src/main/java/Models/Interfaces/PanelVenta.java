@@ -11,6 +11,8 @@ import Models.ClienteDAO;
 import Models.ConexionDB;
 import Models.Empleado;
 import Models.EmpleadoDAO;
+import Models.Factura;
+import Models.FacturaDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
@@ -26,36 +28,39 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PanelVenta extends javax.swing.JFrame {
 
-
+private DefaultTableModel model;
     /**
-     * Creates new form PanelVenta
+     *
      */
 public PanelVenta(List<Empleado> empleados,List<Calzado> calzados, List<Cliente> clientes) {
-    initComponents(); // Crea la interfaz
+    initComponents(); 
+model = new DefaultTableModel();
+model.setColumnIdentifiers(new Object[]{"Indice", "Código", "Descripción", "Marca", "Precio Venta", "Cantidad", "Total"});
+TablaVenta.setModel(model);
    btnConfirmarVenta.setEnabled(false);
-    cargarEmpleados(empleados); // Llena la combo
+    cargarEmpleados(empleados); 
     cargarCalzados(calzados);
     cargarClientes(clientes);
 }
 public void cargarCalzados(List<Calzado> calzados){
-   ComboBoxCalzado.removeAllItems(); // Limpia los ítems anteriores
+   ComboBoxCalzado.removeAllItems(); 
 
     for (Calzado a: calzados) {
         ComboBoxCalzado.addItem(a.getCodigo()+(" ")+a.getMarca()+(" ")+a.getDescripcion()+(" ")+a.getTalle()+(" ")+("$")+a.getPrecioVenta()); // Agrega el nombre al combo
     }
 }
 public void cargarClientes(List<Cliente> clientes){
-   ComboBoxCliente.removeAllItems(); // Limpia los ítems anteriores
+   ComboBoxCliente.removeAllItems(); 
 
     for (Cliente c: clientes) {
-        ComboBoxCliente.addItem(c.getNombre()+c.getDNI_CUIL()); // Agrega el nombre al combo
+        ComboBoxCliente.addItem(c.getNombre()+(" ")+c.getDNI_CUIL()); 
     }
 }
 public void cargarEmpleados(List<Empleado> empleados) {
-    ComboBoxEmpleado.removeAllItems(); // Limpia los ítems anteriores
+    ComboBoxEmpleado.removeAllItems();
 
     for (Empleado e : empleados) {
-        ComboBoxEmpleado.addItem(e.getNombre()); // Agrega el nombre al combo
+        ComboBoxEmpleado.addItem(e.getNombre()); 
     }
 }
 
@@ -113,7 +118,7 @@ public void cargarEmpleados(List<Empleado> empleados) {
 
             },
             new String [] {
-                "Indice", "Codigo Calzado", "Descripcion", "Marca", "Precio"
+                "Indice", "Codigo Calzado", "Descripcion", "Marca", "Precio", "Cantidad", "Total"
             }
         ));
         jScrollPane2.setViewportView(TablaVenta);
@@ -139,13 +144,13 @@ public void cargarEmpleados(List<Empleado> empleados) {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(233, Short.MAX_VALUE)
                 .addComponent(jButton3)
                 .addGap(66, 66, 66)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addComponent(jScrollPane2)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -174,6 +179,11 @@ public void cargarEmpleados(List<Empleado> empleados) {
         jLabel3.setText("Seleccione el Empleado que realiza la venta:");
 
         ComboBoxCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        ComboBoxCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboBoxClienteActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
         jLabel1.setText("Seleccione el/los Calzados que lleva el cliente");
@@ -263,8 +273,8 @@ public void cargarEmpleados(List<Empleado> empleados) {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ComboBoxCalzado, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ComboBoxCalzado, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(43, 43, 43)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -282,7 +292,7 @@ public void cargarEmpleados(List<Empleado> empleados) {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
@@ -299,9 +309,78 @@ public void cargarEmpleados(List<Empleado> empleados) {
     }//GEN-LAST:event_ComboBoxEmpleadoActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-                                          
+DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
 
-    DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
+    // Obtener el calzado seleccionado
+    String seleccion = (String) ComboBoxCalzado.getSelectedItem();
+    if (seleccion == null || seleccion.isEmpty()) return;
+
+    String[] partes = seleccion.split(" ");
+
+    String codigo = partes[0];
+    String marca = partes[1];
+
+    StringBuilder descripcionBuilder = new StringBuilder();
+    for (int i = 2; i < partes.length - 1; i++) {
+        descripcionBuilder.append(partes[i]);
+        if (i < partes.length - 2) {
+            descripcionBuilder.append(" ");
+        }
+    }
+    String descripcion = descripcionBuilder.toString();
+
+    // Limpiar el "$" del precio si lo tiene
+    String precioStr = partes[partes.length - 1].replaceAll("[^\\d.]", "");
+    double precio = Double.parseDouble(precioStr);
+
+    boolean encontrado = false;
+
+    for (int i = 0; i < model.getRowCount(); i++) {
+        String codigoEnTabla = (String) model.getValueAt(i, 1); // columna "Código"
+
+        if (codigo.equals(codigoEnTabla)) {
+            int cantidad = (int) model.getValueAt(i, 5); // columna "Cantidad"
+            cantidad++;
+
+            model.setValueAt(cantidad, i, 5); // actualizar cantidad
+            model.setValueAt(precio * cantidad, i, 6); // actualizar total
+
+            // Descontar 1 del stock en la BD
+            new CalzadoDAO().descontarStock(Integer.parseInt(codigo));
+            encontrado = true;
+            break;
+        }
+    }
+
+    if (!encontrado) {
+        int nuevaFila = model.getRowCount() + 1;
+        model.addRow(new Object[]{
+            nuevaFila,      // Índice
+            codigo,         // Código
+            descripcion,    // Descripción
+            marca,          // Marca
+            precio,         // Precio unitario
+            1,              // Cantidad inicial
+            precio          // Total (1 x precio)
+        });
+
+        // Descontar 1 del stock en la BD
+        new CalzadoDAO().descontarStock(Integer.parseInt(codigo));
+    }
+
+    // 🔄 Actualizar ComboBox para que desaparezca el calzado si quedó sin stock
+    List<Calzado> listaActualizada = new CalzadoDAO().obtenerTodos();
+    cargarCalzados(listaActualizada);
+
+    // ✅ (opcional) Reiniciar selección
+    ComboBoxCalzado.setSelectedIndex(0);
+
+
+
+
+
+
+    /*DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
 
 
     String seleccion = (String) ComboBoxCalzado.getSelectedItem();
@@ -333,30 +412,30 @@ public void cargarEmpleados(List<Empleado> empleados) {
 
 
     ComboBoxCalzado.setSelectedIndex(0);
-
+*/
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-  double total = 0.0;
+double total = 0.0;
 
-    DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
+DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
 
-    for (int i = 0; i < model.getRowCount(); i++) {
+for (int i = 0; i < model.getRowCount(); i++) {
 
-        Object valorPrecio = model.getValueAt(i, 4);
-  
-        String precioStr = valorPrecio.toString().replace("$", "").replace(",", "").trim();
-        try {
-            double precio = Double.parseDouble(precioStr);
-            total += precio;
-        } catch (NumberFormatException e) {
+    Object valorTotal = model.getValueAt(i, 6); // columna 6 = total por renglón
 
-            JOptionPane.showMessageDialog(this, "Error en parseo de precio en fila " + (i+1));
-        }
+    String totalStr = valorTotal.toString().replace("$", "").replace(",", "").trim();
+
+    try {
+        double subtotal = Double.parseDouble(totalStr);
+        total += subtotal;
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Error al convertir el total en la fila " + (i + 1));
     }
+}
 
-    // Mostrar el total en algún JTextField, por ejemplo uno llamado txtTotal
-    jTextField1.setText(String.format("$%.2f", total));        // TODO add your handling code here:
+
+jTextField1.setText(String.format("$%.2f", total));     // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void ComboBoxCalzadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxCalzadoActionPerformed
@@ -370,22 +449,85 @@ public void cargarEmpleados(List<Empleado> empleados) {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-   int respuesta = JOptionPane.showConfirmDialog(this, 
-                    "¿Confirmar realización de pago correctamente?", 
-                    "Confirmación de Pago", 
-                    JOptionPane.YES_NO_OPTION);
+ int filas = TablaVenta.getRowCount();
+
+if (filas == 0) {
+    // No hay elementos en la tabla
+    JOptionPane.showMessageDialog(this, "Debe agregar productos antes de pagar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+} else {
+    // Tiene elementos, preguntar por confirmación
+    int respuesta = JOptionPane.showConfirmDialog(this, 
+            "¿Confirmar realización de pago correctamente?", 
+            "Confirmación de Pago", 
+            JOptionPane.YES_NO_OPTION);
 
     if (respuesta == JOptionPane.YES_OPTION) {
         JOptionPane.showMessageDialog(this, "Pago realizado con éxito");
         btnConfirmarVenta.setEnabled(true);
     } else {
         JOptionPane.showMessageDialog(this, "Pago no realizado");
-        
-    }       
+    }
+}
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void btnConfirmarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarVentaActionPerformed
-   try {
+DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
+String clienteSeleccionado1 = (String) ComboBoxCliente.getSelectedItem();
+
+String[] partes = clienteSeleccionado1.split(" ");
+String clienteSeleccionado = partes[partes.length - 1];
+
+if (model.getRowCount() == 0) {
+    JOptionPane.showMessageDialog(null, "No hay calzados en la venta.");
+    return;
+}
+
+if (clienteSeleccionado == null || clienteSeleccionado.trim().isEmpty()) {
+    JOptionPane.showMessageDialog(null, "Debe seleccionar un cliente.");
+    return;
+}
+
+int cantidadTotal = 0;
+double totalFinal = 0.0;
+
+for (int i = 0; i < model.getRowCount(); i++) {
+    // Usar Double.parseDouble en lugar de Integer.parseInt
+    double cantidadDouble = Double.parseDouble(model.getValueAt(i, 4).toString());
+    int cantidad = (int) cantidadDouble; // convertir a entero si es necesario
+
+    // Para total, continúa usando Double.parseDouble
+    double total = Double.parseDouble(model.getValueAt(i, 5).toString());
+
+    cantidadTotal += cantidad;
+    totalFinal += total;
+}
+
+Factura factura = new Factura();
+factura.setCantidad(cantidadTotal); // cantidad total de calzados
+factura.setTotal(totalFinal); // La cantidad total de calzados en la columna 'total'
+
+Cliente Buscar = new Cliente();
+ClienteDAO aux = new ClienteDAO();
+Buscar = aux.buscarCliente(clienteSeleccionado);
+factura.setCliente(Buscar); // asignar cliente
+
+try {
+    FacturaDAO facturaDAO = new FacturaDAO();
+    facturaDAO.insertarFactura(factura);
+
+    JOptionPane.showMessageDialog(null, "Venta registrada con éxito.");
+
+    model.setRowCount(0); // limpiar tabla
+
+} catch (Exception ex) {
+    ex.printStackTrace();
+    JOptionPane.showMessageDialog(null, "Error al registrar la venta.");
+}
+        this.dispose();
+        PantallaPrincipal v1= new PantallaPrincipal();
+        v1.setVisible(true);    
+
+/*   try {
         // Recorrer todas las filas de la tabla de venta
         int filas = TablaVenta.getRowCount();
 
@@ -423,8 +565,8 @@ public void cargarEmpleados(List<Empleado> empleados) {
     }
         this.dispose();
         PantallaPrincipal v1= new PantallaPrincipal();
-        v1.setVisible(true); 
-
+        v1.setVisible(true); ´
+*/
     }//GEN-LAST:event_btnConfirmarVentaActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -439,6 +581,10 @@ List<Empleado> empleados = dao.obtenerTodos();
 PanelVenta v2 = new PanelVenta(empleados,calzados,clientes);
 v2.setVisible(true);     // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void ComboBoxClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboBoxClienteActionPerformed
 
     /**
      * @param args the command line arguments

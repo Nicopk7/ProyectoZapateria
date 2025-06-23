@@ -61,8 +61,7 @@ public List<Calzado> listarCalzadoConStockBajo() {
 public List<Calzado> obtenerTodos() {
     List<Calzado> lista = new ArrayList<>();
 
-    String sql = "SELECT codigo, descripcion, marca, precio_costo, precio_venta, color, talle, cant_stock, sucursal_id FROM calzado";
-
+   String sql = "SELECT codigo, descripcion, marca, precio_costo, precio_venta, color, talle, cant_stock, sucursal_id FROM calzado WHERE cant_stock > 0";
     try (Connection conn = ConexionDB.getConexion();
          PreparedStatement stmt = conn.prepareStatement(sql);
          ResultSet rs = stmt.executeQuery()) {
@@ -79,7 +78,7 @@ public List<Calzado> obtenerTodos() {
             c.setTalle(rs.getInt("talle"));
             c.setCantStock(rs.getInt("cant_stock"));
 
-            // Crear la sucursal y setear su ID
+           
             Sucursal sucursal = new Sucursal();
             sucursal.setId(rs.getInt("sucursal_id"));
             c.setSucursal(sucursal);
@@ -93,9 +92,22 @@ public List<Calzado> obtenerTodos() {
 
     return lista;
 }
+public void descontarStock(int codigo) {
+    String sql = "UPDATE calzado SET cant_stock = cant_stock - 1 WHERE codigo = ? AND cant_stock > 0";
+
+    try (Connection con = ConexionDB.getConexion();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setInt(1, codigo);
+        ps.executeUpdate();
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
 
 public Calzado buscarCalzado(String codigo) {
-    Calzado c = null; // inicializar en null
+    Calzado c = null; 
     String sql = "SELECT codigo, descripcion, marca, precio_costo, precio_venta, color, talle, cant_stock, sucursal_id FROM calzado WHERE codigo = ?";
     
     try (Connection conn = ConexionDB.getConexion();
@@ -111,7 +123,7 @@ public Calzado buscarCalzado(String codigo) {
                 c.setPrecioCosto(rs.getDouble("precio_costo"));
                 c.setPrecioVenta(rs.getDouble("precio_venta"));
                 c.setColor(rs.getString("color"));
-                c.setTalle(rs.getInt("talle")); // o int, según corresponda
+                c.setTalle(rs.getInt("talle")); 
                 c.setCantStock(rs.getInt("cant_stock"));
             Sucursal sucursal = new Sucursal();
             sucursal.setId(rs.getInt("sucursal_id"));
@@ -121,7 +133,7 @@ public Calzado buscarCalzado(String codigo) {
     } catch (SQLException ex) {
         ex.printStackTrace();
     }
-    return c; // retornar null si no se encontró
+    return c; 
 }
 
 }

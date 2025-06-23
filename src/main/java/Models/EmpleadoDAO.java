@@ -6,7 +6,7 @@ import java.util.List;
 
 public class EmpleadoDAO {
      public void insertar(Empleado e) {
-        String sql = "INSERT INTO empleado (legajo, nombre, dni, domicilio, telefono, antiguedad, sucursal_id) " +
+        String sql = "INSERT INTO empleado (dni, nombre, legajo, domicilio, telefono, antiguedad, sucursal_id) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = ConexionDB.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -29,7 +29,7 @@ public class EmpleadoDAO {
 public List<Empleado> obtenerTodos() {
     List<Empleado> lista = new ArrayList<>();
 
-    String sql = "SELECT legajo, nombre, dni, domicilio, telefono, antiguedad, sucursal_id FROM empleado";
+    String sql = "SELECT dni, nombre, legajo, domicilio, telefono, antiguedad, sucursal_id FROM empleado";
 
     try (Connection conn = ConexionDB.getConexion();
          PreparedStatement stmt = conn.prepareStatement(sql);
@@ -38,9 +38,9 @@ public List<Empleado> obtenerTodos() {
         while (rs.next()) {
             Empleado e = new Empleado();
 
-            e.setLegajo(rs.getInt("legajo"));
-            e.setNombre(rs.getString("nombre"));
             e.setDni(rs.getString("dni"));
+            e.setNombre(rs.getString("nombre"));
+            e.setLegajo(rs.getInt("legajo"));
             e.setDomicilio(rs.getString("domicilio"));
             e.setTelefono(rs.getString("telefono"));
             e.setAntiguedad(rs.getInt("antiguedad"));
@@ -70,9 +70,10 @@ public Empleado buscarEmpleado(String x) {
         try (ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 e = new Empleado();
+                e.setDni(rs.getString("dni"));
                 e.setLegajo(rs.getInt("legajo"));
                 e.setNombre(rs.getString("nombre"));
-                e.setDni(rs.getString("dni"));
+                e.setLegajo(rs.getInt("legajo"));
                 e.setDomicilio(rs.getString("domicilio"));
                 e.setTelefono(rs.getString("telefono"));
                 e.setAntiguedad(rs.getInt("antiguedad"));

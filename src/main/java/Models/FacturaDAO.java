@@ -5,28 +5,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FacturaDAO {
-     public void insertar(Factura f) {
-        String sql = "INSERT INTO factura (id, cantidad, total, cliente_id) " +
-                     "VALUES (?, ?, ?, ?)";
-        try (Connection conn = ConexionDB.getConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+public void insertarFactura(Factura factura) throws SQLException {
+    Connection con = ConexionDB.getConexion();
 
-            stmt.setInt(1, f.getId());
-            stmt.setInt(2, f.getCantidad());
-            stmt.setDouble(3, f.getTotal());
-            stmt.setString(4, f.getCliente().getDNI_CUIL());
+    String sql = "INSERT INTO factura (id,cantidad, total, cliente_dni) VALUES (?,?, ?, ?)";
+    PreparedStatement ps = con.prepareStatement(sql);
+   ps.setInt(1, factura.getId());
+    ps.setInt(2, factura.getCantidad()); // cantidad total de calzados
+    ps.setDouble(3, factura.getTotal()); // total a pagar
+    ps.setString(4, factura.getCliente().getDNI_CUIL()); // DNI del cliente
 
-            stmt.executeUpdate();
+    ps.executeUpdate();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    ps.close();
+    con.close();
+}
 
 public List<Factura> obtenerTodos() {
     List<Factura> lista = new ArrayList<>();
 
-    String sql = "SELECT cantidad, total, cliente_id FROM factura";
+    String sql = "SELECT id,cantidad, total, cliente_dni FROM factura";
 
     try (Connection conn = ConexionDB.getConexion();
          PreparedStatement stmt = conn.prepareStatement(sql);

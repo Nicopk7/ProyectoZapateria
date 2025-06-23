@@ -48,12 +48,12 @@ if (calzadoEncontrado != null) {
     
     //--------------------------------------------------------------------
     Empleado e = new Empleado();
-    e.setLegajo(1);
-    e.setNombre("Eliseo Vottero");
-    e.setDni("44333444");
-    e.setDomicilio("Peronista 126");
-    e.setTelefono("2664444040");
-    e.setAntiguedad(4);
+    e.setLegajo(5);
+    e.setNombre("Nicolas Pereyra");
+    e.setDni("44345222");
+    e.setDomicilio("Peronista 333");
+    e.setTelefono("266994040");
+    e.setAntiguedad(1);
     Sucursal q = new Sucursal();
         q.setId(1); // ID de sucursal existente en la base de datos
         e.setSucursal(q);
@@ -80,10 +80,10 @@ if (calzadoEncontrado != null) {
 
 //----------------------------------------------------------------------------------------
 
-/*Cliente t = new Cliente();
-t.setNombre("Carlos");
+Cliente t = new Cliente();
 t.setDNI_CUIL("44300400");
-t.setTelefono("123456789");
+t.setNombre("PRIMER CLIENTE");
+t.setTelefono("2664223344");
 ClienteDAO daocliente = new ClienteDAO();
 daocliente.insertar(t);
 
@@ -93,9 +93,12 @@ for (Cliente p : clientes) {
     System.out.println("Nombre: " + p.getNombre() +
                        ", DNI/CUIL: " + p.getDNI_CUIL() +
                        ", Telefono: " + p.getTelefono());
-*/
+
 }
-    }
+}
+
+}
+    
 
 
 
