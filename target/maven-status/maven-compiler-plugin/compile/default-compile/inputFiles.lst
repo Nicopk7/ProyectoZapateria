@@ -1,22 +1,22 @@
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Interfaces\PanelGestionEmpleado.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Interfaces\PanelVenta.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Main.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Renglon.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\CalzadoDAO.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\ConexionDB.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Interfaces\PanelMostrarCalzados.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\RenglonDAO.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Sucursal.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\EmpleadoDAO.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Cliente.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Interfaces\BuscarEmpleado.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Calzado.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Interfaces\PanelGestionCalzado.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\FacturaDAO.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Factura.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Interfaces\AgregarCalzado.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Empleado.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\ClienteDAO.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Interfaces\PantallaPrincipal.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\Interfaces\PanelListadoStock.java
-C:\Users\Octavio\Desktop\Proyecto2025\ProyectoGitHubb\ProyectoZapateria\src\main\java\Models\SucursalDAO.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\Interfaces\PanelVenta.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\Interfaces\PanelGestionCalzado.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\ConexionDB.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\Interfaces\BuscarEmpleado.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\Cliente.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\FacturaDAO.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\Interfaces\PanelGestionEmpleado.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\Sucursal.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\SucursalDAO.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\Empleado.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\ClienteDAO.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\Main.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\Interfaces\PanelListadoStock.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\Factura.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\Interfaces\PantallaPrincipal.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\Interfaces\PanelMostrarCalzados.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\Renglon.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\Interfaces\AgregarCalzado.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\RenglonDAO.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\CalzadoDAO.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\EmpleadoDAO.java
+F:\Varios\Universidad\Ingeniería de Software 1\Proyecto integrador\ProyectoZapateria\src\main\java\Models\Calzado.java

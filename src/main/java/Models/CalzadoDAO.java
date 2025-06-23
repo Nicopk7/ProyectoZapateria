@@ -136,4 +136,15 @@ public Calzado buscarCalzado(String codigo) {
     return c; 
 }
 
+public void sumarStock(int codigo, int cantidad) throws SQLException {
+    Connection con = ConexionDB.getConexion();
+    String sql = "UPDATE calzado SET cant_stock = cant_stock + ? WHERE codigo = ?";
+    PreparedStatement ps = con.prepareStatement(sql);
+    ps.setInt(1, cantidad);
+    ps.setInt(2, codigo);
+    ps.executeUpdate();
+    ps.close();
+    con.close();
+}
+
 }

@@ -80,7 +80,6 @@ public void cargarEmpleados(List<Empleado> empleados) {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         TablaVenta = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -123,14 +122,6 @@ public void cargarEmpleados(List<Empleado> empleados) {
         ));
         jScrollPane2.setViewportView(TablaVenta);
 
-        jButton3.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
-        jButton3.setText("Cancelar Venta");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
         jButton4.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
         jButton4.setForeground(new java.awt.Color(255, 0, 0));
         jButton4.setText("Volver");
@@ -145,21 +136,17 @@ public void cargarEmpleados(List<Empleado> empleados) {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(233, Short.MAX_VALUE)
-                .addComponent(jButton3)
-                .addGap(66, 66, 66)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addComponent(jScrollPane2)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(192, 192, 192)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3))
+                .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(48, 48, 48))
         );
 
@@ -443,9 +430,27 @@ jTextField1.setText(String.format("$%.2f", total));     // TODO add your handlin
     }//GEN-LAST:event_ComboBoxCalzadoActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        this.dispose();
-        PantallaPrincipal v1= new PantallaPrincipal();
-        v1.setVisible(true);        
+        DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
+    
+    if (model.getRowCount() > 0) {
+        CalzadoDAO calzadoDAO = new CalzadoDAO();
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            int codigo = Integer.parseInt(model.getValueAt(i, 1).toString()); // Código
+            int cantidad = Integer.parseInt(model.getValueAt(i, 5).toString()); // Cantidad
+            
+            try {
+                calzadoDAO.sumarStock(codigo, cantidad); // Esta función la explico abajo
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error al restaurar stock del calzado con código: " + codigo);
+            }
+        }
+    }
+
+    this.dispose();
+    PantallaPrincipal v1 = new PantallaPrincipal();
+    v1.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -492,11 +497,11 @@ double totalFinal = 0.0;
 
 for (int i = 0; i < model.getRowCount(); i++) {
     // Usar Double.parseDouble en lugar de Integer.parseInt
-    double cantidadDouble = Double.parseDouble(model.getValueAt(i, 4).toString());
+    double cantidadDouble = Double.parseDouble(model.getValueAt(i, 5).toString());
     int cantidad = (int) cantidadDouble; // convertir a entero si es necesario
 
     // Para total, continúa usando Double.parseDouble
-    double total = Double.parseDouble(model.getValueAt(i, 5).toString());
+    double total = Double.parseDouble(model.getValueAt(i, 6).toString());
 
     cantidadTotal += cantidad;
     totalFinal += total;
@@ -569,19 +574,6 @@ try {
 */
     }//GEN-LAST:event_btnConfirmarVentaActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-this.dispose();
-EmpleadoDAO dao = new EmpleadoDAO();
-ClienteDAO dao1=new ClienteDAO();
-CalzadoDAO dao2=new CalzadoDAO();
-List<Calzado> calzados= dao2.obtenerTodos();
-List<Cliente> clientes=dao1.obtenerTodos();
-List<Empleado> empleados = dao.obtenerTodos();
-
-PanelVenta v2 = new PanelVenta(empleados,calzados,clientes);
-v2.setVisible(true);     // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
     private void ComboBoxClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ComboBoxClienteActionPerformed
@@ -608,7 +600,6 @@ public static void main(String args[]) {
     private javax.swing.JButton btnConfirmarVenta;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;

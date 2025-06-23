@@ -24,7 +24,6 @@ Models\Interfaces\PanelVenta$2.class
 Models\Interfaces\PanelListadoStock$1.class
 Models\Interfaces\PanelGestionEmpleado$3.class
 Models\FacturaDAO.class
-Models\Interfaces\PanelVenta$10.class
 Models\Interfaces\PanelVenta$8.class
 Models\Interfaces\PantallaPrincipal$6.class
 Models\Factura.class
