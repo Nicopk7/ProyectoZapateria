@@ -5,21 +5,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FacturaDAO {
-public void insertarFactura(Factura factura) throws SQLException {
-    Connection con = ConexionDB.getConexion();
+public int insertarFacturaYRetornarID(Factura factura) throws SQLException {
+    String sql = "INSERT INTO factura (cantidad, total, cliente_dni) VALUES (?, ?, ?)";
+    try (Connection conn = ConexionDB.getConexion();
+         PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-    String sql = "INSERT INTO factura (id,cantidad, total, cliente_dni) VALUES (?,?, ?, ?)";
-    PreparedStatement ps = con.prepareStatement(sql);
-   ps.setInt(1, factura.getId());
-    ps.setInt(2, factura.getCantidad()); // cantidad total de calzados
-    ps.setDouble(3, factura.getTotal()); // total a pagar
-    ps.setString(4, factura.getCliente().getDNI_CUIL()); // DNI del cliente
+        stmt.setInt(1, factura.getId());
+        stmt.setInt(1, factura.getCantidad());
+        stmt.setDouble(2, factura.getTotal());
+        stmt.setString(3, factura.getCliente().getDNI_CUIL());
 
-    ps.executeUpdate();
+        stmt.executeUpdate();
 
-    ps.close();
-    con.close();
+        try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                return generatedKeys.getInt(1);
+            } else {
+                throw new SQLException("No se generó ID para la factura.");
+            }
+        }
+    }
 }
+
 
 public List<Factura> obtenerTodos() {
     List<Factura> lista = new ArrayList<>();

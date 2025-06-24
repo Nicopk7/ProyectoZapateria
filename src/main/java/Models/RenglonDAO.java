@@ -15,7 +15,7 @@ public class RenglonDAO {
             stmt.setInt(2, r.getCantidad());
             stmt.setDouble(3, r.getTotal());
             stmt.setDouble(4, r.getFactura().getId());
-            stmt.setInt(9, r.getCalzado().getCodigo()); 
+            stmt.setInt(5, r.getCalzado().getCodigo()); 
 
             stmt.executeUpdate();
 

@@ -13,6 +13,8 @@ import Models.Empleado;
 import Models.EmpleadoDAO;
 import Models.Factura;
 import Models.FacturaDAO;
+import Models.Renglon;
+import Models.RenglonDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
@@ -486,7 +488,6 @@ if (filas == 0) {
                                                   
     DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
 
-    // Validar que haya calzados en la tabla
     if (model.getRowCount() == 0) {
         JOptionPane.showMessageDialog(null, "No hay calzados en la venta.");
         return;
@@ -495,8 +496,6 @@ if (filas == 0) {
     // Obtener y validar CLIENTE
     Object itemCliente = ComboBoxCliente.getEditor().getItem();
     String clienteRaw = itemCliente != null ? itemCliente.toString().trim() : "";
-
-    // Extraer posible DNI del cliente
     String posibleDNICliente = clienteRaw.replaceAll(".*?(\\d+)$", "$1");
 
     ClienteDAO clienteDAO = new ClienteDAO();
@@ -510,8 +509,6 @@ if (filas == 0) {
     // Obtener y validar EMPLEADO
     Object itemEmpleado = ComboBoxEmpleado.getEditor().getItem();
     String empleadoRaw = itemEmpleado != null ? itemEmpleado.toString().trim() : "";
-
-    // Extraer posible DNI del empleado
     String posibleDNIEmpleado = empleadoRaw.replaceAll(".*?(\\d+)$", "$1");
 
     EmpleadoDAO empleadoDAO = new EmpleadoDAO();
@@ -522,44 +519,87 @@ if (filas == 0) {
         return;
     }
 
-    // Calcular totales
+    // Calcular totales y preparar renglones
     int cantidadTotal = 0;
     double totalFinal = 0.0;
+    List<Renglon> renglones = new ArrayList<>();
+    CalzadoDAO calzadoDAO = new CalzadoDAO();
 
     for (int i = 0; i < model.getRowCount(); i++) {
-        double cantidadDouble = Double.parseDouble(model.getValueAt(i, 5).toString());
-        int cantidad = (int) cantidadDouble;
-
+        int cantidad = Integer.parseInt(model.getValueAt(i, 5).toString());
         double total = Double.parseDouble(model.getValueAt(i, 6).toString());
 
         cantidadTotal += cantidad;
         totalFinal += total;
+
+        String codigo = model.getValueAt(i, 1).toString();
+
+        Renglon r = new Renglon();
+        r.setCantidad(cantidad);
+        r.setTotal(total);
+
+        Calzado calzado = calzadoDAO.buscarCalzado(codigo);
+        r.setCalzado(calzado);
+
+        renglones.add(r);
     }
 
-    // Crear factura
-    Factura factura = new Factura();
-    factura.setCantidad(cantidadTotal); // cantidad total de calzados
-    factura.setTotal(totalFinal);       // total a pagar
-    factura.setCliente(cliente);
-    //factura.setEmpleado(empleado);      // solo si tu clase Factura tiene este campo
-
     try {
-        FacturaDAO facturaDAO = new FacturaDAO();
-        facturaDAO.insertarFactura(factura);
+        // Insertar factura
+        Factura factura = new Factura();
+        factura.setCantidad(cantidadTotal);
+        factura.setTotal(totalFinal);
+        factura.setCliente(cliente);
 
-        JOptionPane.showMessageDialog(null, "Venta registrada con éxito.");
-        model.setRowCount(0); // limpiar tabla
+        FacturaDAO facturaDAO = new FacturaDAO();
+        int idGenerado = facturaDAO.insertarFacturaYRetornarID(factura);
+        factura.setId(idGenerado);
+
+        // Insertar renglones
+        RenglonDAO renglonDAO = new RenglonDAO();
+        for (Renglon r : renglones) {
+            r.setFactura(factura);
+            renglonDAO.insertar(r);
+        }
+
+        // Armar mensaje con renglones
+        StringBuilder mensaje = new StringBuilder();
+        mensaje.append("✅ Venta registrada con éxito\n");
+        mensaje.append("🧾 ID de Factura: ").append(idGenerado).append("  |  Total: $").append(String.format("%.2f", totalFinal)).append("\n");
+        mensaje.append("📦 Productos:\n");
+
+        for (Renglon r : renglones) {
+            mensaje.append("• Código: ").append(r.getCalzado().getCodigo())
+                   .append(" | Descripción: ").append(r.getCalzado().getDescripcion())
+                   .append(" | Cantidad: ").append(r.getCantidad())
+                   .append(" | Total: $").append(String.format("%.2f", r.getTotal()))
+                   .append("\n");
+        }
+
+        // Mostrar con botón personalizado
+        int opcion = JOptionPane.showOptionDialog(
+                null,
+                mensaje.toString(),
+                "Factura registrada",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                new Object[]{"Imprimir factura", "Cerrar"},
+                "Imprimir factura"
+        );
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            JOptionPane.showMessageDialog(null, "🖨 Imprimiendo...");
+        }
+
+        model.setRowCount(0);
+        this.dispose();
+        new PantallaPrincipal().setVisible(true);
+
     } catch (Exception ex) {
         ex.printStackTrace();
         JOptionPane.showMessageDialog(null, "Error al registrar la venta.");
     }
-
-    // Volver a la pantalla principal
-    this.dispose();
-    PantallaPrincipal v1 = new PantallaPrincipal();
-    v1.setVisible(true);
-
-
 /*   try {
         // Recorrer todas las filas de la tabla de venta
         int filas = TablaVenta.getRowCount();
