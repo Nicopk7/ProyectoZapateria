@@ -10,10 +10,7 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Octavio
- */
+
 public class PanelListadoStock extends javax.swing.JFrame {
 
     static void setRowCount(int i) {

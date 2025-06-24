@@ -63,7 +63,7 @@ public Cliente buscarCliente(String x) {
     } catch (SQLException ex) {
         ex.printStackTrace();
     }
-    return c; // devuelve null si no se encontró
+    return c; 
 }
 
 }

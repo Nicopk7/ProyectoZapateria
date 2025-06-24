@@ -60,7 +60,7 @@ public List<Empleado> obtenerTodos() {
 }
 
 public Empleado buscarEmpleado(String x) {
-    Empleado e = null; // Importante inicializar en null
+    Empleado e = null; 
     String sql = "SELECT * FROM empleado WHERE dni = ?";
     
     try (Connection conn = ConexionDB.getConexion();
@@ -73,7 +73,6 @@ public Empleado buscarEmpleado(String x) {
                 e.setDni(rs.getString("dni"));
                 e.setLegajo(rs.getInt("legajo"));
                 e.setNombre(rs.getString("nombre"));
-                e.setLegajo(rs.getInt("legajo"));
                 e.setDomicilio(rs.getString("domicilio"));
                 e.setTelefono(rs.getString("telefono"));
                 e.setAntiguedad(rs.getInt("antiguedad"));
@@ -86,7 +85,7 @@ public Empleado buscarEmpleado(String x) {
     } catch (SQLException ex) {
         ex.printStackTrace();
     }
-    return e; // Retorna null si no encontró nada
+    return e; 
 }
 
 }

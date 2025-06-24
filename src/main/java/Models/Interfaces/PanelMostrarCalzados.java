@@ -7,10 +7,7 @@ package Models.Interfaces;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Octavio
- */
+
 public class PanelMostrarCalzados extends javax.swing.JFrame {
     static void setRowCount(int i) {
         throw new UnsupportedOperationException("Not supported yet."); 

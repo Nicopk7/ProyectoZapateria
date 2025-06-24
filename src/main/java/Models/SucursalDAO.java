@@ -4,10 +4,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Usuario
- */
 public class SucursalDAO {
      public void insertar(Sucursal s) {
         String sql = "INSERT INTO calzado (id, nombre, domicilio, ciudad) " +

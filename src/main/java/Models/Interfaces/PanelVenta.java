@@ -304,7 +304,6 @@ public void cargarEmpleados(List<Empleado> empleados) {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
 
-    // Leer lo que esté escrito o seleccionado en el ComboBox
     Object itemCalzado = ComboBoxCalzado.getEditor().getItem();
     String textoCombo = itemCalzado != null ? itemCalzado.toString().trim() : "";
 
@@ -313,16 +312,14 @@ DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
         return;
     }
 
-    // Extraer el primer valor (código alfanumérico)
     String[] partes = textoCombo.split(" ");
     if (partes.length == 0) {
         JOptionPane.showMessageDialog(null, "Formato inválido de selección.");
         return;
     }
 
-    String codigo = partes[0]; // lo tomamos como String directamente
+    String codigo = partes[0]; 
 
-    // Buscar el calzado en la BD por código
     CalzadoDAO calzadoDAO = new CalzadoDAO();
     Calzado calzado = calzadoDAO.buscarCalzado(codigo);
 
@@ -331,7 +328,6 @@ DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
         return;
     }
 
-    // Verificar si ya está en la tabla
     boolean encontrado = false;
     for (int i = 0; i < model.getRowCount(); i++) {
         String codigoTabla = model.getValueAt(i, 1).toString();
@@ -360,55 +356,12 @@ DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
         };
         model.addRow(fila);
     }
-
-    // Descontar stock
     calzadoDAO.descontarStock(codigo);
 
-    // Refrescar la lista de calzados en la ComboBox
     List<Calzado> listaActualizada = calzadoDAO.obtenerTodos();
     cargarCalzados(listaActualizada);
 
-    // ✅ (opcional) Reiniciar selección
     ComboBoxCalzado.setSelectedIndex(0);
-
-
-
-
-
-
-    /*DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
-
-
-    String seleccion = (String) ComboBoxCalzado.getSelectedItem();
-
-
-    String[] partes = seleccion.split(" "); // ajusta si el formato es diferente
-
-
-    String codigo = partes[0];
-
-
-    String marca = partes[1];
-
-   
-    StringBuilder descripcionBuilder = new StringBuilder();
-    for (int i = 2; i < partes.length - 1; i++) {
-        descripcionBuilder.append(partes[i]);
-        if (i < partes.length - 2) {
-            descripcionBuilder.append(" ");
-        }
-    }
-    String descripcion = descripcionBuilder.toString();
-
- 
-    String precio = partes[partes.length - 1];
-
-  
-    model.addRow(new Object[]{model.getRowCount() + 1, codigo, descripcion, marca, precio});
-
-
-    ComboBoxCalzado.setSelectedIndex(0);
-*/
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -418,7 +371,7 @@ DefaultTableModel model = (DefaultTableModel) TablaVenta.getModel();
 
 for (int i = 0; i < model.getRowCount(); i++) {
 
-    Object valorTotal = model.getValueAt(i, 6); // columna 6 = total por renglón
+    Object valorTotal = model.getValueAt(i, 6); 
 
     String totalStr = valorTotal.toString().replace("$", "").replace(",", "").trim();
 
@@ -431,7 +384,7 @@ for (int i = 0; i < model.getRowCount(); i++) {
 }
 
 
-jTextField1.setText(String.format("$%.2f", total));     // TODO add your handling code here:
+jTextField1.setText(String.format("$%.2f", total));     
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void ComboBoxCalzadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxCalzadoActionPerformed
@@ -466,10 +419,10 @@ jTextField1.setText(String.format("$%.2f", total));     // TODO add your handlin
  int filas = TablaVenta.getRowCount();
 
 if (filas == 0) {
-    // No hay elementos en la tabla
+    
     JOptionPane.showMessageDialog(this, "Debe agregar productos antes de pagar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 } else {
-    // Tiene elementos, preguntar por confirmación
+    
     int respuesta = JOptionPane.showConfirmDialog(this, 
             "¿Confirmar realización de pago correctamente?", 
             "Confirmación de Pago", 
@@ -493,7 +446,7 @@ if (filas == 0) {
         return;
     }
 
-    // Obtener y validar CLIENTE
+    
     Object itemCliente = ComboBoxCliente.getEditor().getItem();
     String clienteRaw = itemCliente != null ? itemCliente.toString().trim() : "";
     String posibleDNICliente = clienteRaw.replaceAll(".*?(\\d+)$", "$1");
@@ -506,7 +459,7 @@ if (filas == 0) {
         return;
     }
 
-    // Obtener y validar EMPLEADO
+    
     Object itemEmpleado = ComboBoxEmpleado.getEditor().getItem();
     String empleadoRaw = itemEmpleado != null ? itemEmpleado.toString().trim() : "";
     String posibleDNIEmpleado = empleadoRaw.replaceAll(".*?(\\d+)$", "$1");
@@ -519,7 +472,7 @@ if (filas == 0) {
         return;
     }
 
-    // Calcular totales y preparar renglones
+  
     int cantidadTotal = 0;
     double totalFinal = 0.0;
     List<Renglon> renglones = new ArrayList<>();
@@ -545,7 +498,7 @@ if (filas == 0) {
     }
 
     try {
-        // Insertar factura
+        
         Factura factura = new Factura();
         factura.setCantidad(cantidadTotal);
         factura.setTotal(totalFinal);
@@ -555,14 +508,13 @@ if (filas == 0) {
         int idGenerado = facturaDAO.insertarFacturaYRetornarID(factura);
         factura.setId(idGenerado);
 
-        // Insertar renglones
         RenglonDAO renglonDAO = new RenglonDAO();
         for (Renglon r : renglones) {
             r.setFactura(factura);
             renglonDAO.insertar(r);
         }
 
-        // Armar mensaje con renglones
+        
         StringBuilder mensaje = new StringBuilder();
         mensaje.append("✅ Venta registrada con éxito\n");
         mensaje.append("🧾 ID de Factura: ").append(idGenerado).append("  |  Total: $").append(String.format("%.2f", totalFinal)).append("\n");
@@ -576,7 +528,6 @@ if (filas == 0) {
                    .append("\n");
         }
 
-        // Mostrar con botón personalizado
         int opcion = JOptionPane.showOptionDialog(
                 null,
                 mensaje.toString(),
@@ -600,46 +551,7 @@ if (filas == 0) {
         ex.printStackTrace();
         JOptionPane.showMessageDialog(null, "Error al registrar la venta.");
     }
-/*   try {
-        // Recorrer todas las filas de la tabla de venta
-        int filas = TablaVenta.getRowCount();
 
-        // Abrimos conexión a la BD
-        Connection conn = ConexionDB.getConexion();
-
-        // Preparar la sentencia SQL de actualización
-        String sql = "UPDATE calzado SET cant_stock = cant_stock - 1 WHERE codigo = ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-
-        boolean errorAlActualizar = false;
-
-        for (int i = 0; i < filas; i++) {
-            String codigoProducto = (String) TablaVenta.getValueAt(i, 1); // La columna 1 es código
-            ps.setString(1, codigoProducto);
-            int filasActualizadas = ps.executeUpdate();
-
-            if (filasActualizadas == 0) {
-                errorAlActualizar = true;
-                JOptionPane.showMessageDialog(null, "No se encontró el producto con código: " + codigoProducto);
-            }
-        }
-
-        ps.close();
-        conn.close();
-
-        if (!errorAlActualizar) {
-            JOptionPane.showMessageDialog(null, "Stock actualizado correctamente para todos los productos.");
-            // Puedes limpiar la tabla o hacer otras acciones luego...
-        }
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error al actualizar stock: " + e.getMessage());
-        e.printStackTrace();
-    }
-        this.dispose();
-        PantallaPrincipal v1= new PantallaPrincipal();
-        v1.setVisible(true); ´
-*/
     }//GEN-LAST:event_btnConfirmarVentaActionPerformed
 
     private void ComboBoxClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxClienteActionPerformed

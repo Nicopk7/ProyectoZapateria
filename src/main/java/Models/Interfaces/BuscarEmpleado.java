@@ -6,6 +6,7 @@ package Models.Interfaces;
 
 import Models.Empleado;
 import Models.EmpleadoDAO;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -144,23 +145,30 @@ public class BuscarEmpleado extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-String dni = jTextField1.getText().trim();
-EmpleadoDAO empleadoDao = new EmpleadoDAO(); 
-Empleado resultado = empleadoDao.buscarEmpleado(dni);
+    String dni = jTextField1.getText().trim();
 
-if (resultado != null) {
-    String datosEmpleado = 
-        "Legajo: " + resultado.getLegajo() + "\n" +
-        "Nombre: " + resultado.getNombre() + "\n" +
-        "DNI: " + resultado.getDni() + "\n" +
-        "Domicilio: " + resultado.getDomicilio() + "\n" +
-        "Telefono: " + resultado.getTelefono() + "\n" +
-        "Antiguedad: " + resultado.getAntiguedad() + "\n" +
-        "Sucursal: " + (resultado.getSucursal() != null ? resultado.getSucursal().getId() : "N/A");
-   jTextArea1.setText(datosEmpleado);
-} else {
-    jTextArea1.setText("Empleado no encontrado");
-}
+    // Verificación: exactamente 8 dígitos numéricos
+    if (!dni.matches("\\d{8}")) {
+        JOptionPane.showMessageDialog(null, "El DNI debe contener exactamente 8 dígitos numéricos.");
+        return;
+    }
+
+    EmpleadoDAO empleadoDao = new EmpleadoDAO(); 
+    Empleado resultado = empleadoDao.buscarEmpleado(dni);
+
+    if (resultado != null) {
+        String datosEmpleado = 
+            "Legajo: " + resultado.getLegajo() + "\n" +
+            "Nombre: " + resultado.getNombre() + "\n" +
+            "DNI: " + resultado.getDni() + "\n" +
+            "Domicilio: " + resultado.getDomicilio() + "\n" +
+            "Telefono: " + resultado.getTelefono() + "\n" +
+            "Antiguedad: " + resultado.getAntiguedad() + "\n" +
+            "Sucursal: " + (resultado.getSucursal() != null ? resultado.getSucursal().getId() : "N/A");
+        jTextArea1.setText(datosEmpleado);
+    } else {
+        jTextArea1.setText("Empleado no encontrado");
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
